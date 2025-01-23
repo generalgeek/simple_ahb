@@ -1,19 +1,18 @@
 #pragma once
 #include <systemc.h>
-#include "common.h"
+#include "interface/ahb_master_if.h"
 
-// ahb master interface
-class AHBMasterIF : public sc_module {
+class AHBMasterShell : public sc_module {
   public:
-    DEVICE_ID master_id_;
-    SC_HAS_PROCESS(AHBMasterIF);
-    AHBMasterIF(sc_module_name name, DEVICE_ID master_id) : sc_module(name), master_id_(master_id) {
-        SC_THREAD(Process);
+    SC_HAS_PROCESS(AHBMasterShell);
+    AHBMasterShell(sc_module_name name) : sc_module(name) {
+        SC_METHOD(Process);
         sensitive << HCLK.pos();
         dont_initialize();
     }
 
   public:
+    sc_port<AHBMasterInterface> port_;
     // Input ports
     sc_in<bool> HGRANT;        // Master grant signal
     sc_in<bool> HREADY;        // Transfer ready signal
@@ -21,7 +20,6 @@ class AHBMasterIF : public sc_module {
     sc_in<bool> HRESETn;       // Reset signal (active low)
     sc_in<bool> HCLK;          // Clock signal
     sc_in<sc_uint<32>> HRDATA; // Read data bus
-
     // Output ports
     sc_out<bool> HBUSREQ;       // Bus request signal
     sc_out<bool> HLOCK;         // Lock signal
@@ -34,8 +32,5 @@ class AHBMasterIF : public sc_module {
     sc_out<sc_uint<32>> HWDATA; // Write data bus
 
   private:
-    virtual void Process() = 0;
-    virtual void Reset() = 0;
-    virtual void WriteOut() = 0;
-    virtual void ReadIn() = 0;
+    void Process();
 };

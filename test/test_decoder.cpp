@@ -26,7 +26,7 @@ class TestDecoder : public sc_module {
         sc_uint<SLAVE_COUNT> sel = 0;
         sc_trace_file* tf = sc_create_vcd_trace_file("trace");
         sc_trace(tf, addr, "addr");
-        // sc_trace(tf, sel, "sel");
+        sc_trace(tf, sel, "sel");
         while (true) {
             addr_signal_.write(addr);
             wait(10, SC_NS);

@@ -84,10 +84,7 @@
         "expected": "cpp"
     },
     "C_Cpp.default.compilerPath": "/usr/bin/gcc",
-    // "files.exclude": {
-    //     "**/3rdparty": true
-    // },
-    // "search.exclude": {
-    //     "**/3rdparty": true
-    // }
+    "files.exclude": {
+        "3rdparty/": true
+    }
 }

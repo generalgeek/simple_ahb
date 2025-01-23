@@ -4,6 +4,10 @@ Decoder::Decoder() = default;
 
 sc_uint<SLAVE_COUNT> Decoder::AddrDecode(sc_uint<32> addr) {
     sc_uint<SLAVE_COUNT> selx = 0;
+    if (addr % 4) { // 判断地址对齐
+        LOG_ERROR(logger, "addr[{:#010x}] is not aligned to a 32-bit width..", addr.to_uint());
+        return selx;
+    }
     if (DMA_ADDR_START <= addr && addr <= DMA_ADDR_END) {
         selx[SLAVE_DMA_ID] = 1;
         LOG_INFO(logger, "addr[{:#010x}], slave dma be selected, HSELx={:#b}.", addr.to_uint(), selx.to_uint());

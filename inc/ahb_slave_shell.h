@@ -1,14 +1,20 @@
 #pragma once
+
 #include <systemc.h>
 #include "common.h"
+#include "interface/ahb_slave_if.h"
 
-// ahb slave base
-class AHBSlaveBase {
+class AHBSlaveShell : public sc_module {
   public:
-    DEVICE_ID slave_id_;
-    AHBSlaveBase(DEVICE_ID slave_id) : slave_id_(slave_id) {}
+    SC_HAS_PROCESS(AHBSlaveShell);
+    AHBSlaveShell(sc_module_name name) : sc_module(name) {
+        SC_METHOD(Process);
+        sensitive << HCLK.pos();
+        dont_initialize();
+    }
 
   public:
+    sc_port<AHBSlaveInterface> prot_; // 连接Slave功能模块的端口
     // Input ports
     sc_in<bool> HSEL;          // Slave select signal
     sc_in<sc_uint<32>> HADDR;  // Address bus
@@ -21,10 +27,12 @@ class AHBSlaveBase {
     sc_in<bool> HCLK;          // Clock signal
     sc_in<sc_uint<4>> HMASTER; // Master number
     sc_in<bool> HMASTERLOCK;   // Master lock signal
-
     // Output ports
     sc_out<bool> HREADY;         // Ready signal
     sc_out<sc_uint<2>> HRESP;    // Response signal
     sc_out<sc_uint<32>> HRDATA;  // Read data bus
     sc_out<sc_uint<16>> HSPLITx; // Split response
+
+  private:
+    void Process();
 };

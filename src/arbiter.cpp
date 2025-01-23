@@ -1,6 +1,9 @@
-/* #include "ahb_arbiter.h"
+#include "arbiter.h"
 
-void AHBArbiter::Process() {
+void Arbiter::Arbitrate() {
+}
+
+/* void AHBArbiter::Process() {
     while (true) {
         wait(); // 等待时钟上升沿
         // 判断复位信号,复位时清除状态,所有主设备失去控制权
@@ -42,5 +45,4 @@ void AHBArbiter::Reset() {
     HGRANTx.write(0);       // 清除全部授权
     HMASTER.write(0);       // 清除主设备编号
     HMASTLOCK.write(false); // 清除总线锁定
-}
- */
+} */
