@@ -1,10 +1,6 @@
 #include "decoder.h"
 
-void Decoder::Process() {
-    sc_uint<32> addr = 0;
-    port_->Read(addr);
-    port_->Write(this->AddrDecode(addr));
-}
+Decoder::Decoder() = default;
 
 sc_uint<SLAVE_COUNT> Decoder::AddrDecode(sc_uint<32> addr) {
     sc_uint<SLAVE_COUNT> selx = 0;

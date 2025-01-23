@@ -15,7 +15,7 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
 endif()
 
 # compile systemc2.3.3
-# set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build SystemC as a static library")
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build SystemC as a static library")
 set(SYSTEMC_DIR ${CMAKE_SOURCE_DIR}/3rdparty/systemc)
 set(SYSTEMC_INCLUDE_DIR ${SYSTEMC_DIR}/src)
 set(SYSTEMC_BUILD_DIR ${CMAKE_BINARY_DIR}/systemc_build)
