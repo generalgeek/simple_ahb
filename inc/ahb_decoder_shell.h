@@ -16,7 +16,7 @@ class AHBDecoderShell : public sc_module {
   public:
     sc_port<AHBDecoderInterface> decoder_port_;
     // Input ports
-    sc_in<sc_uint<32>> HADDR; // 输入地址信号
+    sc_in<sc_uint<BW>> HADDR; // 输入地址信号
     // Output ports
     sc_out<sc_uint<SLAVE_COUNT>> HSELx; // slave选择信号,每个bit位可以控制一个slave
   private:

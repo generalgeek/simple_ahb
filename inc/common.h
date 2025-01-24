@@ -3,7 +3,8 @@
 #include <cstdint>
 #include <systemc.h>
 
-#define BUS_WIDTH 4
+#define BW 32 // Bus Width
+// #define BUS_WIDTH 4
 #define MASTER_COUNT  16
 #define SLAVE_COUNT   16
 #define MASTER_PE_ID  0
@@ -28,7 +29,7 @@ enum BURST_TYPE : uint8_t {
 enum TRANS_SIZE : uint8_t {
     Byte = 0b000,     // 传输宽度为8-bit
     Halfword = 0b001, // 传输宽度为16-bit
-    Word = 0b101,     // 传输宽度为32-bit
+    Word = 0b010,     // 传输宽度为32-bit
 }; // HSIZE[2:0]
 
 enum TRANS_RESP : uint8_t {
@@ -45,7 +46,7 @@ enum TRANS_TYPE : uint8_t {
     SEQ = 0b11,    // burst传输中的剩余部分
 }; // HTRANS[1:0]
 
-const sc_uint<32> DMA_ADDR_START = 0x0000'0000;
-const sc_uint<32> DMA_ADDR_END = 0x0000'FFFF;
-const sc_uint<32> RAM_ADDR_START = 0x0001'0000;
-const sc_uint<32> RAM_ADDR_END = 0x0001'FFFF;
+const sc_uint<BW> DMA_ADDR_START = 0x0000'0000;
+const sc_uint<BW> DMA_ADDR_END = 0x0000'FFFF;
+const sc_uint<BW> RAM_ADDR_START = 0x0001'0000;
+const sc_uint<BW> RAM_ADDR_END = 0x0001'FFFF;

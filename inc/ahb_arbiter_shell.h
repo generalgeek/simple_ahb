@@ -17,7 +17,7 @@ class AHBAribterShell : public sc_module {
     // 输入信号
     sc_in<sc_uint<MASTER_COUNT>> HBUSREQx; // 每个比特表示一个主设备的总线请求信号,允许多个bit位为1
     sc_in<sc_uint<MASTER_COUNT>> HLOCKx; // 每个比特表示一个主设备的总线锁信号,允许多个bit位为1
-    sc_in<sc_uint<32>> HADDR;            // 当前地址总线，辅助判断是否需要拆分或重试
+    sc_in<sc_uint<BW>> HADDR;            // 当前地址总线，辅助判断是否需要拆分或重试
     sc_in<sc_uint<16>> HSPLITx;          // 分裂传输信号，从设备用来释放总线的控制
     sc_in<sc_uint<2>> HTRANS;            // 当前传输类型（IDLE, BUSY, SEQUENTIAL, NONSEQUENTIAL）
     sc_in<sc_uint<3>> HBURST;            // 突发传输类型（SINGLE, INCR, WRAP4, WRAP8, WRAP16 等）

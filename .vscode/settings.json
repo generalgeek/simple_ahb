@@ -85,6 +85,6 @@
     },
     "C_Cpp.default.compilerPath": "/usr/bin/gcc",
     "files.exclude": {
-        "3rdparty/": true
+        // "3rdparty/": true
     }
 }

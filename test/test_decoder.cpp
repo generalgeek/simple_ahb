@@ -17,12 +17,12 @@ class TestDecoder : public sc_module {
   public:
     Decoder* decoder_;
     AHBDecoderShell* decoderShell_;
-    sc_signal<sc_uint<32>> addr_signal_;
+    sc_signal<sc_uint<BW>> addr_signal_;
     sc_signal<sc_uint<SLAVE_COUNT>> sel_signal_;
 
   private:
     void Process() {
-        sc_uint<32> addr = 0;
+        sc_uint<BW> addr = 0;
         sc_uint<SLAVE_COUNT> sel = 0;
         sc_trace_file* tf = sc_create_vcd_trace_file("trace");
         sc_trace(tf, addr, "addr");

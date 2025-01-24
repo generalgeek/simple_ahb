@@ -8,5 +8,5 @@
 class Decoder : public AHBDecoderInterface {
   public:
     Decoder();
-    sc_uint<SLAVE_COUNT> AddrDecode(sc_uint<32> addr) override;
+    sc_uint<SLAVE_COUNT> AddrDecode(sc_uint<BW> addr) override;
 };

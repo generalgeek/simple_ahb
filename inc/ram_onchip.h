@@ -12,8 +12,10 @@ constexpr size_t RAM_SIZE = 4096; // 4096*4=16KB
 class RAMOnChip : public AHBSlaveInterface {
   public:
     RAMOnChip(DEVICE_ID id);
-    void Read(sc_uint<32> addr, sc_uint<32>& data) override;
-    void Write(sc_uint<32> addr, sc_uint<32> data) override;
+    bool Read(sc_uint<BW> addr, sc_uint<BW>& data, sc_uint<BW> size) override;
+    bool Write(sc_uint<BW> addr, sc_uint<BW> data, sc_uint<BW> size) override;
+  private:
+    bool AddrValidCheck(sc_uint<BW> addr, sc_uint<BW> size);
 
   private:
     DEVICE_ID id_;

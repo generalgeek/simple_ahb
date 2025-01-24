@@ -14,25 +14,26 @@ class AHBSlaveShell : public sc_module {
     }
 
   public:
-    sc_port<AHBSlaveInterface> prot_; // 连接Slave功能模块的端口
+    sc_port<AHBSlaveInterface> port_; // 连接Slave功能模块的端口
     // Input ports
     sc_in<bool> HSEL;          // Slave select signal
-    sc_in<sc_uint<32>> HADDR;  // Address bus
+    sc_in<sc_uint<BW>> HADDR;  // Address bus
     sc_in<bool> HWRITE;        // Write signal
     sc_in<sc_uint<2>> HTRANS;  // Transfer type
     sc_in<sc_uint<2>> HSIZE;   // Transfer size
     sc_in<sc_uint<3>> HBURST;  // Burst type
-    sc_in<sc_uint<32>> HWDATA; // Write data bus
-    sc_in<bool> HRESETn;       // Reset signal (active low)
+    sc_in<sc_uint<BW>> HWDATA; // Write data bus
+    sc_in<bool> HRESET;        // Reset signal (active low)
     sc_in<bool> HCLK;          // Clock signal
     sc_in<sc_uint<4>> HMASTER; // Master number
     sc_in<bool> HMASTERLOCK;   // Master lock signal
     // Output ports
     sc_out<bool> HREADY;         // Ready signal
     sc_out<sc_uint<2>> HRESP;    // Response signal
-    sc_out<sc_uint<32>> HRDATA;  // Read data bus
+    sc_out<sc_uint<BW>> HRDATA;  // Read data bus
     sc_out<sc_uint<16>> HSPLITx; // Split response
 
   private:
     void Process();
+    void Reset();
 };
