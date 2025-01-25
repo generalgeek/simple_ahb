@@ -13,6 +13,12 @@
 #define SLAVE_RAM_ID  1
 
 using DEVICE_ID = sc_uint<4>;
+// using bw_t = sc_uint<BW>; // bus width type
+
+const sc_uint<BW> DMA_ADDR_START = 0x0000'0000;
+const sc_uint<BW> DMA_ADDR_END = 0x0000'FFFF;
+const sc_uint<BW> RAM_ADDR_START = 0x0001'0000;
+const sc_uint<BW> RAM_ADDR_END = 0x0001'FFFF;
 
 // beat 一个时钟周期总线传输的数据量，在32位宽的总线上，一个beat是4Byte
 enum BURST_TYPE : uint8_t {
@@ -46,7 +52,9 @@ enum TRANS_TYPE : uint8_t {
     SEQ = 0b11,    // burst传输中的剩余部分
 }; // HTRANS[1:0]
 
-const sc_uint<BW> DMA_ADDR_START = 0x0000'0000;
-const sc_uint<BW> DMA_ADDR_END = 0x0000'FFFF;
-const sc_uint<BW> RAM_ADDR_START = 0x0001'0000;
-const sc_uint<BW> RAM_ADDR_END = 0x0001'FFFF;
+union Packet {
+    uint32_t data32;
+    uint16_t data16[2];
+    uint8_t data8[4];
+    Packet() : data32(0) {}
+};

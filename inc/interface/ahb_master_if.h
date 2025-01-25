@@ -4,6 +4,6 @@
 
 class AHBMasterInterface : public sc_interface {
   public:
-    virtual void Read(sc_uint<BW> addr, sc_uint<BW>& data) = 0;
-    virtual void Write(sc_uint<BW> addr, sc_uint<BW> data) = 0;
+    virtual bool Read(sc_uint<BW> addr, sc_uint<BW>& data, sc_uint<BW> size) = 0;
+    virtual bool Write(sc_uint<BW> addr, sc_uint<BW> data, sc_uint<BW> size) = 0;
 };

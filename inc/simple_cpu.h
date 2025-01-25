@@ -11,12 +11,10 @@ constexpr size_t CACHE_SIZE = 256; // 256*4=1KB
 class SimpleCPU : public AHBMasterInterface {
   public:
     SimpleCPU(DEVICE_ID id);
-    void Read(sc_uint<BW> addr, sc_uint<BW>& data) override;
-    void Write(sc_uint<BW> addr, sc_uint<BW> data) override;
+    bool Read(sc_uint<BW> addr, sc_uint<BW>& data, sc_uint<BW> size) override;
+    bool Write(sc_uint<BW> addr, sc_uint<BW> data, sc_uint<BW> size) override;
 
   private:
     DEVICE_ID id_;
-    uint32_t cache_[CACHE_SIZE]; // 1KB L1缓存,访问无延迟
-    uint32_t cache_ptr_;         // cache指针
-    size_t trans_beat_size_;
+    sc_uint<BW> cache_[CACHE_SIZE]; // 1KB
 };

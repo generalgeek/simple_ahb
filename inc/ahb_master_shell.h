@@ -8,7 +8,8 @@ class AHBMasterShell : public sc_module {
     AHBMasterShell(sc_module_name name) : sc_module(name) {
         SC_METHOD(Process);
         sensitive << HCLK.pos();
-        dont_initialize();
+        // dont_initialize();
+        this->Reset();
     }
 
   public:
@@ -17,7 +18,7 @@ class AHBMasterShell : public sc_module {
     sc_in<bool> HGRANT;        // Master grant signal
     sc_in<bool> HREADY;        // Transfer ready signal
     sc_in<sc_uint<2>> HRESP;   // Transfer response
-    sc_in<bool> HRESETn;       // Reset signal (active low)
+    sc_in<bool> HRESET;        // Reset signal (active low)
     sc_in<bool> HCLK;          // Clock signal
     sc_in<sc_uint<BW>> HRDATA; // Read data bus
     // Output ports
@@ -33,4 +34,5 @@ class AHBMasterShell : public sc_module {
 
   private:
     void Process();
+    void Reset();
 };

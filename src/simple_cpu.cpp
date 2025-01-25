@@ -3,8 +3,10 @@
 SimpleCPU::SimpleCPU(DEVICE_ID id) : id_(id) {
 }
 
-void SimpleCPU::Read(sc_uint<BW> addr, sc_uint<BW>& data) {
+bool SimpleCPU::Read(sc_uint<BW> addr, sc_uint<BW>& data, sc_uint<BW> size) {
+    return false;
 }
 
-void SimpleCPU::Write(sc_uint<BW> addr, sc_uint<BW> data) {
+bool SimpleCPU::Write(sc_uint<BW> addr, sc_uint<BW> data, sc_uint<BW> size) {
+    return false;
 }
