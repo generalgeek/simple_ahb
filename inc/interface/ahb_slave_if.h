@@ -1,5 +1,6 @@
 #pragma once
 #include <systemc.h>
+#include "common.h"
 
 // AHB Slave 接口层
 class AHBSlaveInterface : public sc_interface {

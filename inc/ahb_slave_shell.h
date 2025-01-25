@@ -10,7 +10,7 @@ class AHBSlaveShell : public sc_module {
     AHBSlaveShell(sc_module_name name) : sc_module(name) {
         SC_METHOD(Process);
         sensitive << HCLK.pos();
-        dont_initialize();
+        // dont_initialize();
     }
 
   public:

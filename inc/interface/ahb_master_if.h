@@ -1,5 +1,6 @@
 #pragma once
 #include <systemc.h>
+#include "common.h"
 
 class AHBMasterInterface : public sc_interface {
   public:
