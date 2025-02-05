@@ -1,19 +1,17 @@
 #pragma once
 #include <systemc.h>
 #include "common.h"
-#include "interface/ahb_arbiter_if.h"
 
-class AHBAribterShell : public sc_module {
+class AHBAribter : public sc_module {
   public:
-    SC_HAS_PROCESS(AHBAribterShell);
-    AHBAribterShell(sc_module_name name) : sc_module(name) {
+    SC_HAS_PROCESS(AHBAribter);
+    AHBAribter(sc_module_name name) : sc_module(name) {
         SC_METHOD(Process);
         sensitive << HCLK.pos();
-        dont_initialize();
+        // dont_initialize();
     }
 
   public:
-    sc_port<AHBArbiterInterface> port_;
     // 输入信号
     sc_in<sc_uint<MASTER_COUNT>> HBUSREQx; // 每个比特表示一个主设备的总线请求信号,允许多个bit位为1
     sc_in<sc_uint<MASTER_COUNT>> HLOCKx; // 每个比特表示一个主设备的总线锁信号,允许多个bit位为1
@@ -32,4 +30,5 @@ class AHBAribterShell : public sc_module {
 
   private:
     void Process();
+    void Reset();
 };
