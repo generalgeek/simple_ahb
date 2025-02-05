@@ -1,22 +1,18 @@
 #include <systemc.h>
-#include "ahb_decoder_shell.h"
-#include "decoder.h"
+#include "ahb_decoder.h"
 
 class TestDecoder : public sc_module {
   public:
     SC_HAS_PROCESS(TestDecoder);
     TestDecoder(sc_module_name name) : sc_module(name){
         SC_THREAD(Process);
-        decoder_ = new Decoder();
-        decoderShell_ = new AHBDecoderShell("decodershell");
-        decoderShell_->decoder_port_(*decoder_);
-        decoderShell_->HADDR(addr_signal_);
-        decoderShell_->HSELx(sel_signal_);
+        decoder_ = new AHBDecoder("decoder");
+        decoder_->HADDR(addr_signal_);
+        decoder_->HSELx(sel_signal_);
     }
 
   public:
-    Decoder* decoder_;
-    AHBDecoderShell* decoderShell_;
+    AHBDecoder* decoder_;
     sc_signal<sc_uint<BW>> addr_signal_;
     sc_signal<sc_uint<SLAVE_COUNT>> sel_signal_;
 
@@ -31,7 +27,7 @@ class TestDecoder : public sc_module {
             addr_signal_.write(addr);
             wait(10, SC_NS);
             addr += 0x7fff;
-            sel = decoderShell_->HSELx.read();
+            sel = decoder_->HSELx.read();
         }
         sc_close_vcd_trace_file(tf);
     }
