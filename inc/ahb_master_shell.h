@@ -6,7 +6,7 @@ class AHBMasterShell : public sc_module {
   public:
     SC_HAS_PROCESS(AHBMasterShell);
     AHBMasterShell(sc_module_name name) : sc_module(name) {
-        SC_METHOD(Process);
+        SC_THREAD(Process);
         sensitive << HCLK.pos();
         // dont_initialize();
         this->Reset();
