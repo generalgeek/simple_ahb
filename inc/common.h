@@ -5,8 +5,8 @@
 
 #define BW 32 // Bus Width
 // #define BUS_WIDTH 4
-#define MASTER_COUNT  16
-#define SLAVE_COUNT   16
+#define MASTER_CNT  16
+#define SLAVE_CNT   16
 #define MASTER_PE_ID  0
 #define MASTER_DMA_ID 1
 #define SLAVE_DMA_ID  0

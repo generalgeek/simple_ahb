@@ -4,8 +4,8 @@ void AHBDecoder::Process() {
     HSELx.write(this->AddrDecode(HADDR.read()));
 }
 
-sc_uint<SLAVE_COUNT> AHBDecoder::AddrDecode(sc_uint<BW> addr) {
-    sc_uint<SLAVE_COUNT> selx = 0;
+sc_uint<SLAVE_CNT> AHBDecoder::AddrDecode(sc_uint<BW> addr) {
+    sc_uint<SLAVE_CNT> selx = 0;
     // if (addr % 4) { // 判断地址对齐
     //     LOG_ERROR(logger, "addr[{:#010x}] is not aligned to a BW-bit width..", addr.to_uint());
     //     return selx;

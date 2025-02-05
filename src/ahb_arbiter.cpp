@@ -12,14 +12,14 @@ void AHBAribter::Process() {
         return; // 没有主设备请求
     }
     DEVICE_ID cur_id = HMASTER.read();
-    sc_uint<MASTER_COUNT> grantx = 0;
+    sc_uint<MASTER_CNT> grantx = 0;
     if (HMASTLOCK.read() && HGRANTx.read().range(cur_id, cur_id)) {
         // 仲裁规则1：如果总线在之前的仲裁中 被已授权的设备 锁定
         grantx[cur_id] = 1;
         HGRANTx.write(grantx);
         return;
     }
-    for (DEVICE_ID i = 0; i < MASTER_COUNT; i++) {
+    for (DEVICE_ID i = 0; i < MASTER_CNT; i++) {
         // 仲裁规则2：设备id越小,优先级越高
         if (HBUSREQx.read().range(i, i)) {
             grantx[i] = 1;

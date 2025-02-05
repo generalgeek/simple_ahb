@@ -17,9 +17,9 @@ class AHBDecoder : public sc_module {
     // Input ports
     sc_in<sc_uint<BW>> HADDR; // 输入地址信号
     // Output ports
-    sc_out<sc_uint<SLAVE_COUNT>> HSELx; // slave选择信号,每个bit位可以控制一个slave
+    sc_out<bool> HSELx[SLAVE_CNT]; // slave选择信号,每个bit位可以控制一个slave
 
   private:
     void Process();
-    sc_uint<SLAVE_COUNT> AddrDecode(sc_uint<BW> addr);
+    sc_uint<SLAVE_CNT> AddrDecode(sc_uint<BW> addr);
 };
