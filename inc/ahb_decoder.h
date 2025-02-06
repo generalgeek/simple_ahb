@@ -21,5 +21,5 @@ class AHBDecoder : public sc_module {
 
   private:
     void Process();
-    sc_uint<SLAVE_CNT> AddrDecode(sc_uint<BW> addr);
+    DEVICE_ID AddrDecode(sc_uint<BW> addr);
 };

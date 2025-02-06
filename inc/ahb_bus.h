@@ -14,9 +14,12 @@ class AHBBus : public sc_module {
     AHBBus(sc_module_name name);
 
   public:
-    AHBMasterShell* simple_cpu_shell_;
     SimpleCPU* simple_cpu_;
+    AHBMasterShell* simple_cpu_shell_;
+    RAMOnChip* ram_onchip_;
+    AHBSlaveShell* ram_shell_;
     AHBDecoder* decoder_;
+    AHBArbiter* arbiter_;
 
   public: // AHB Signal
     sc_signal<bool> HCLK;
@@ -24,7 +27,7 @@ class AHBBus : public sc_module {
     sc_signal<sc_uint<BW>> HADDR;
     sc_signal<sc_uint<2>> HTRANS;
     sc_signal<bool> HWRITE;
-    sc_signal<sc_uint<2>> HSIZE;
+    sc_signal<sc_uint<3>> HSIZE;
     sc_signal<sc_uint<3>> HBURST;
     sc_signal<sc_uint<4>> HPORT;
     sc_signal<sc_uint<BW>> HWDATA;
@@ -33,6 +36,7 @@ class AHBBus : public sc_module {
     sc_signal<bool> HREADY;
     sc_signal<sc_uint<2>> HRESP;
     sc_signal<bool> HBUSREQx[MASTER_CNT];
+    sc_signal<bool> HLOCKx[MASTER_CNT];
     sc_signal<bool> HGRANTx[MASTER_CNT];
     sc_signal<sc_uint<4>> HMASTER;
     sc_signal<bool> HMASTERLOCK;
