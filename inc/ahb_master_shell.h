@@ -9,7 +9,6 @@ class AHBMasterShell : public sc_module {
         SC_THREAD(Process);
         sensitive << HCLK.pos();
         // dont_initialize();
-        this->Reset();
     }
 
   public:

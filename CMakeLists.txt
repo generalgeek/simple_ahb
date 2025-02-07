@@ -36,7 +36,7 @@ set(PROJECT_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/inc)
 include_directories(${PROJECT_INCLUDE_DIR})
 
 file(GLOB_RECURSE PROJECT_SOURCES src/*.cpp)
-file(GLOB MAIN test/test_decoder.cpp)
+file(GLOB MAIN src/test_simple_cpu.cpp)
 
 add_executable(SimpleAMBA ${PROJECT_SOURCES} ${MAIN})
 target_link_libraries(SimpleAMBA ${SYSTEMC_LIB} ${QUILL_LIB})
