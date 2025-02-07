@@ -3,25 +3,27 @@
 SimpleCPU::SimpleCPU(DEVICE_ID id) : id_(id) {
 }
 
-bool SimpleCPU::Read(sc_uint<BW> addr, sc_uint<BW>& data, sc_uint<BW> size) {
+bool SimpleCPU::MasterRead(sc_uint<BW> addr, sc_uint<BW>& data, sc_uint<BW> size) {
     if (!AddrValidCheck(addr, size))
         return false;
     int offset = addr / 4;
     int bit_s = (addr % 4) * 8;
     int bit_end = bit_s + size * 8 - 1;
     data = cache_[offset].range(bit_end, bit_s);
-    LOG_TRACE_L1(logger, "Read( addr={:#010x}, data=[{}], size={} )", addr.to_uint(), data.to_uint(), size.to_uint());
+    LOG_DEBUG(logger, "{}  MasterRead(addr={:#010x}, data=[{}], size={})", sc_time_stamp().to_string(), addr.to_uint(),
+              data.to_uint(), size.to_uint());
     return true;
 }
 
-bool SimpleCPU::Write(sc_uint<BW> addr, sc_uint<BW> data, sc_uint<BW> size) {
+bool SimpleCPU::MasterWrite(sc_uint<BW> addr, sc_uint<BW> data, sc_uint<BW> size) {
     if (!AddrValidCheck(addr, size))
         return false;
     int offset = addr / 4;
     int bit_s = (addr % 4) * 8;
     int bit_end = bit_s + size * 8 - 1;
     cache_[offset].range(bit_end, bit_s) = data.range(size * 8 - 1, 0);
-    LOG_TRACE_L1(logger, "Write( addr={:#010x}, data=[{}], size={} )", addr.to_uint(), data.to_uint(), size.to_uint());
+    LOG_DEBUG(logger, "{}  MasterWrite(addr={:#010x}, data=[{}], size={})", sc_time_stamp().to_string(), addr.to_uint(),
+              data.to_uint(), size.to_uint());
     return true;
 }
 

@@ -6,14 +6,18 @@ void AHBMasterShell::Process() {
     while (true) {
         wait(); // 等待时钟信号
         if (HRESET.read() == false) {
+            LOG_DEBUG(logger, "{}  [{}] is reset.", sc_time_stamp().to_string(), name());
             this->Reset();
             continue;
         }
         if (HGRANT.read() == false) {
             // 未获得授权,需要发起总线请求
+            LOG_DEBUG(logger, "{}  [{}] initiates a bus request.", sc_time_stamp().to_string(), name());
             HBUSREQ.write(true);
             continue;
         } else {
+            LOG_DEBUG(logger, "{}  [{}] receives bus grant and starts read/write operations.",
+                      sc_time_stamp().to_string(), name());
             // 已获得授权,可以发起读写操作
             MasterTask task = port_->GetTask();
             HWRITE.write(task.write);
@@ -31,12 +35,12 @@ void AHBMasterShell::Process() {
                 while (true) {
                     if (task.write) {
                         // 写操作, 从自己内部缓存读数据然后写出去
-                        port_->Read(task.inner_addr, data, task.trans_size);
+                        port_->MasterRead(task.inner_addr, data, task.trans_size);
                         HWDATA.write(data);
                     } else {
                         // 读操作, 从外面读数据进来写入内部缓存
                         data = HRDATA.read();
-                        port_->Write(task.inner_addr, data, task.trans_size);
+                        port_->MasterWrite(task.inner_addr, data, task.trans_size);
                     }
                     wait(); // 上述操作完成,在下一个时钟周期查看Slave的相应情况
                     while (HRESP.read() == TRANS_RESP::SPLIT) {

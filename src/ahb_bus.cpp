@@ -1,6 +1,9 @@
 #include "ahb_bus.h"
 
-AHBBus::AHBBus(sc_module_name name) : sc_module(name) {
+AHBBus::AHBBus(sc_module_name name) : sc_module(name), HCLK("g_clk", 10, SC_NS, 0.5, 0, SC_NS, false) {
+    // 时钟周期10ns,高低电平各占一半,起始时刻为0,起始为低电平
+    SC_THREAD(RiseResetSignal);
+    sensitive << HCLK.posedge_event();
     // init simple_cpu(Master)
     simple_cpu_ = new SimpleCPU(MASTER_CPU_ID);
     simple_cpu_shell_ = new AHBMasterShell("simple_cpu_shell");
@@ -69,7 +72,23 @@ AHBBus::AHBBus(sc_module_name name) : sc_module(name) {
 
     // init decoder
     decoder_ = new AHBDecoder("decoder");
+    decoder_->HCLK(HCLK);
+    decoder_->HRESETn(HRESETn);
     decoder_->HADDR(HADDR);
     for (size_t i = 0; i < SLAVE_CNT; i++)
         decoder_->HSELx[i](HSELx[i]);
+}
+
+void AHBBus::RiseResetSignal() {
+    // wait();
+    wait();
+    HRESETn.write(true); // 在第1个时钟周期拉高复位信号,并在之后的时钟周期一直保持高电平
+    LOG_INFO(logger, "{}  the HRESETn signal is pulled high.", sc_time_stamp().to_string());
+    while (true) {
+        wait();
+    }
+}
+
+void AHBBus::end_of_elaboration() {
+    HRESETn.write(false);
 }

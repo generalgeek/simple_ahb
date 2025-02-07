@@ -11,8 +11,8 @@ constexpr size_t CACHE_SIZE = 256; // 256*4=1KB
 class SimpleCPU : public AHBMasterInterface {
   public:
     SimpleCPU(DEVICE_ID id);
-    bool Read(sc_uint<BW> addr, sc_uint<BW>& data, sc_uint<BW> size) override;
-    bool Write(sc_uint<BW> addr, sc_uint<BW> data, sc_uint<BW> size) override;
+    bool MasterRead(sc_uint<BW> addr, sc_uint<BW>& data, sc_uint<BW> size) override;
+    bool MasterWrite(sc_uint<BW> addr, sc_uint<BW> data, sc_uint<BW> size) override;
     MasterTask GetTask() override;
 
   private:

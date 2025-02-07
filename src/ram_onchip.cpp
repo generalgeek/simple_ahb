@@ -1,27 +1,32 @@
 #include "ram_onchip.h"
 
 RAMOnChip::RAMOnChip(DEVICE_ID id) : id_(id) {
+    for (size_t i = 0; i < RAM_SIZE; i++) {
+        ram_[i] = i % BW; // 0~31
+    }
 }
 
-bool RAMOnChip::Read(sc_uint<BW> addr, sc_uint<BW>& data, sc_uint<BW> size) {
+bool RAMOnChip::SlaveRead(sc_uint<BW> addr, sc_uint<BW>& data, sc_uint<BW> size) {
     if (!AddrValidCheck(addr, size))
         return false;
     int offset = addr / 4;
     int bit_s = (addr % 4) * 8;
     int bit_end = bit_s + size * 8 - 1;
     data = ram_[offset].range(bit_end, bit_s);
-    LOG_TRACE_L1(logger, "Read( addr={:#010x}, data=[{}], size={} )", addr.to_uint(), data.to_uint(), size.to_uint());
+    LOG_DEBUG(logger, "{}  SlaveRead(addr={:#010x}, data=[{}], size={})", sc_time_stamp().to_string(), addr.to_uint(),
+              data.to_uint(), size.to_uint());
     return true;
 }
 
-bool RAMOnChip::Write(sc_uint<BW> addr, sc_uint<BW> data, sc_uint<BW> size) {
+bool RAMOnChip::SlaveWrite(sc_uint<BW> addr, sc_uint<BW> data, sc_uint<BW> size) {
     if (!AddrValidCheck(addr, size))
         return false;
     int offset = addr / 4;
     int bit_s = (addr % 4) * 8;
     int bit_end = bit_s + size * 8 - 1;
     ram_[offset].range(bit_end, bit_s) = data.range(size * 8 - 1, 0);
-    LOG_TRACE_L1(logger, "Write( addr={:#010x}, data=[{}], size={} )", addr.to_uint(), data.to_uint(), size.to_uint());
+    LOG_DEBUG(logger, "{}  SlaveWrite(addr={:#010x}, data=[{}], size={})", sc_time_stamp().to_string(), addr.to_uint(),
+              data.to_uint(), size.to_uint());
     return true;
 }
 

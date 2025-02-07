@@ -91,7 +91,7 @@ class SimpleCPUTestbench : public sc_module {
 
         cout << sc_time_stamp() << "：开始写操作，地址=0x" << std::hex << test_addr << ", 数据=0x" << write_data
              << std::dec << endl;
-        bool write_result = cpu->Write(test_addr, write_data, trans_size);
+        bool write_result = cpu->MasterWrite(test_addr, write_data, trans_size);
         if (write_result)
             cout << sc_time_stamp() << "：写操作成功" << endl;
         else
@@ -105,7 +105,7 @@ class SimpleCPUTestbench : public sc_module {
         // -------------------------------
         sc_uint<BW> read_data;
         cout << sc_time_stamp() << "：开始读操作，地址=0x" << std::hex << test_addr << std::dec << endl;
-        bool read_result = cpu->Read(test_addr, read_data, trans_size);
+        bool read_result = cpu->MasterRead(test_addr, read_data, trans_size);
         if (read_result)
             cout << sc_time_stamp() << "：读操作成功，数据=0x" << std::hex << read_data << std::dec << endl;
         else

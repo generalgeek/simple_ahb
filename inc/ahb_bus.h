@@ -10,7 +10,7 @@
 
 class AHBBus : public sc_module {
   public:
-    // SC_HAS_PROCESS(AHBBus);
+    SC_HAS_PROCESS(AHBBus);
     AHBBus(sc_module_name name);
 
   public:
@@ -22,7 +22,7 @@ class AHBBus : public sc_module {
     AHBArbiter* arbiter_;
 
   public: // AHB Signal
-    sc_signal<bool> HCLK;
+    sc_clock HCLK;
     sc_signal<bool> HRESETn;
     sc_signal<sc_uint<BW>> HADDR;
     sc_signal<sc_uint<2>> HTRANS;
@@ -41,4 +41,8 @@ class AHBBus : public sc_module {
     sc_signal<sc_uint<4>> HMASTER;
     sc_signal<bool> HMASTERLOCK;
     sc_signal<bool> HSPLITx[MASTER_CNT];
+
+  private:
+    void RiseResetSignal();
+    virtual void end_of_elaboration() override;
 };

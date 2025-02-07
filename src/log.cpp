@@ -10,7 +10,7 @@ void Log_Init() {
     // logger = quill::Frontend::create_or_get_logger("root", std::move(console_sink));
     logger = quill::Frontend::create_or_get_logger(
         "root", std::move(console_sink),
-        quill::PatternFormatterOptions{ "%(file_name:<12) %(log_level:<6)    %(message)" });
-    // :<12 表示字符串占位12个，不够就补空格
+        quill::PatternFormatterOptions{ "%(file_name:<20) %(log_level:<10)  %(message)" });
+    // :<20 表示字符串占位20个，不够就补空格
     logger->set_log_level(quill::LogLevel::TraceL3);
 }

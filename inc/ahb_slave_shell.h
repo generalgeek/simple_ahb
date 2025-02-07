@@ -3,12 +3,13 @@
 #include <systemc.h>
 #include "common.h"
 #include "interface/ahb_slave_if.h"
+#include "log.h"
 
 class AHBSlaveShell : public sc_module {
   public:
     SC_HAS_PROCESS(AHBSlaveShell);
     AHBSlaveShell(sc_module_name name) : sc_module(name) {
-        SC_METHOD(Process);
+        SC_THREAD(Process);
         sensitive << HCLK.pos();
         // dont_initialize();
     }

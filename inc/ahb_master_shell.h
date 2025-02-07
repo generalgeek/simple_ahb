@@ -1,6 +1,7 @@
 #pragma once
 #include <systemc.h>
 #include "interface/ahb_master_if.h"
+#include "log.h"
 
 class AHBMasterShell : public sc_module {
   public:
