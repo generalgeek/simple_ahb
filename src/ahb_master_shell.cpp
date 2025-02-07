@@ -1,5 +1,7 @@
 #include "ahb_master_shell.h"
 
+static size_t trans_cnt[4]{ 1, 4, 8, 16 };
+
 void AHBMasterShell::Process() {
     sc_uint<BW> data = 0;
     size_t cnt = 0;
@@ -25,7 +27,7 @@ void AHBMasterShell::Process() {
             HSIZE.write(task.trans_size);
             HADDR.write(task.slave_addr);
             HLOCK.write(true);
-            cnt = 1 << (HBURST.read().to_uint() / 2); // 1/4/8
+            cnt = trans_cnt[task.burst_type / 2]; // 1/4/8
             for (size_t i = 0; i < cnt; i++) {
                 if (i == 0) {
                     HTRANS.write(TRANS_TYPE::NONSEQ);
@@ -33,16 +35,18 @@ void AHBMasterShell::Process() {
                     HTRANS.write(TRANS_TYPE::SEQ);
                 }
                 while (true) {
-                    if (task.write) {
-                        // 写操作, 从自己内部缓存读数据然后写出去
+                    if (HREADY.read() == false) {
+                        wait();
+                    }
+                    if (task.write) { // 写操作, 从自己内部缓存读数据然后写出去
                         port_->MasterRead(task.inner_addr, data, task.trans_size);
                         HWDATA.write(data);
-                    } else {
-                        // 读操作, 从外面读数据进来写入内部缓存
+                        wait();
+                    } else { // 读操作, 从外面读数据进来写入内部缓存
+                        wait();
                         data = HRDATA.read();
                         port_->MasterWrite(task.inner_addr, data, task.trans_size);
                     }
-                    wait(); // 上述操作完成,在下一个时钟周期查看Slave的相应情况
                     while (HRESP.read() == TRANS_RESP::SPLIT) {
                         // 如果响应是SPLIT，继续等待更多时钟周期
                         wait();

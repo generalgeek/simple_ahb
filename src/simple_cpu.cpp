@@ -41,15 +41,17 @@ MasterTask SimpleCPU::GetTask() {
 inline bool SimpleCPU::AddrValidCheck(sc_uint<BW> addr, sc_uint<BW> size) {
     sc_uint<BW> offset = addr / 4;
     if (addr / 4 > CACHE_SIZE) { // 传输地址不能超出范围
-        LOG_ERROR(logger, "The addr={:#010x} is out of the Cache range [0, {}].", offset.to_uint(), CACHE_SIZE);
+        LOG_ERROR(logger, "{}  the addr={:#010x} is out of the Cache range [0, {}].", sc_time_stamp().to_string(),
+                  offset.to_uint(), CACHE_SIZE);
         return false;
     }
     if (size != 1 && size != 2 && size != 4) { // 传输大小只能是1B 2B 4B
-        LOG_ERROR(logger, "Not support trans_size=.", size.to_uint());
+        LOG_ERROR(logger, "{}  not support trans_size=.", sc_time_stamp().to_string(), size.to_uint());
         return false;
     }
     if (addr % size) { // 传输地址要与HSIZE对齐
-        LOG_ERROR(logger, "The addr={:#010x} not align with size={}.", addr.to_uint(), size.to_uint());
+        LOG_ERROR(logger, "{}  the addr={:#010x} not align with size={}.", sc_time_stamp().to_string(), addr.to_uint(),
+                  size.to_uint());
         return false;
     }
     return true;

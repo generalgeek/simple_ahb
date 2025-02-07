@@ -6,14 +6,14 @@ void AHBSlaveShell::Process() {
         if (HRESET.read() == false) {
             LOG_DEBUG(logger, "{}  [{}] is reset.", sc_time_stamp().to_string(), name());
             this->Reset(); // 复位
-            return;
+            continue;
         }
         if (HSEL.read() == true) { // 当前Slave被选中
             if (HTRANS.read() == TRANS_TYPE::IDLE || HTRANS.read() == TRANS_TYPE::BUSY) {
                 // 如果HTRANS是IDLE/BUSY状态,Slave应该忽略当前传输并立即响应OKAY
                 HRESP.write(TRANS_RESP::OKAY);
                 ClearHSPLIT();
-                return;
+                continue;
             }
             // 检查是否锁定事务
             if (HMASTERLOCK.read() == true) {
@@ -26,14 +26,14 @@ void AHBSlaveShell::Process() {
                     // HSPLITx.write(HSPLITx.read() | (1 << HMASTER.read())); // 允许当前Master继续
                 }
             }
+            HREADY.write(false);
             sc_uint<BW> addr = HADDR.read();
             sc_uint<BW> size = 1 << HSIZE.read(); // 1 2 4
             if (HWRITE.read() == true) {          // 写操作
                 sc_uint<BW> data = HWDATA.read();
                 if (port_->SlaveWrite(addr, data, size)) {
                     HRESP.write(TRANS_RESP::OKAY);
-                    HSPLITx[HMASTER.read()].write(false);
-                    // HSPLITx.write(HSPLITx.read() & ~(1 << HMASTER.read())); // 写操作完成后清除对应位
+                    HSPLITx[HMASTER.read()].write(false); // 写操作完成后清除对应位
                 } else {
                     HRESP.write(TRANS_RESP::ERROR);
                     ClearHSPLIT(); // 错误时清除所有HSPLITx位
@@ -43,13 +43,13 @@ void AHBSlaveShell::Process() {
                 if (port_->SlaveRead(addr, data, size)) {
                     HRDATA.write(data);
                     HRESP.write(TRANS_RESP::OKAY);
-                    HSPLITx[HMASTER.read()].write(false);
-                    // HSPLITx.write(HSPLITx.read() & ~(1 << HMASTER.read())); // 读操作完成后清除对应位
+                    HSPLITx[HMASTER.read()].write(false); // 读操作完成后清除对应位
                 } else {
                     HRESP.write(TRANS_RESP::ERROR);
                     ClearHSPLIT(); // 错误时清除所有HSPLITx位
                 }
             }
+            HREADY.write(true);
         }
     }
 }

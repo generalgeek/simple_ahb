@@ -15,6 +15,8 @@ void AHBArbiter::Process() {
             HGRANTx[cur_id].write(true);
             continue;
         }
+        for (size_t i = 0; i < MASTER_CNT; i++)
+            HGRANTx[i].write(false);
         for (size_t i = 0; i < MASTER_CNT; i++) {
             // 仲裁规则2：设备id越小,优先级越高
             if (HBUSREQx[i].read() == true) {
