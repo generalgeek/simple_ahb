@@ -31,7 +31,7 @@ int sc_main(int argc, char* argv[]) {
         sc_trace(tf, ahb_bus.HMASTERLOCK, "HMASTERLOCK");
     }
 
-    sc_start(100, SC_NS);
+    sc_start(200, SC_NS);
     sc_close_vcd_trace_file(tf);
     return 0;
 }

@@ -10,17 +10,19 @@ void AHBArbiter::Process() {
             continue;
         }
         DEVICE_ID cur_id = HMASTER.read();
-        if (HMASTLOCK.read() && HGRANTx[cur_id].read()) {
+        if (HBUSREQx[cur_id].read() && HMASTLOCK.read() && HGRANTx[cur_id].read()) {
             // 仲裁规则1：如果总线在之前的仲裁中 被已授权的设备 锁定
             HGRANTx[cur_id].write(true);
             continue;
         }
-        for (size_t i = 0; i < MASTER_CNT; i++)
-            HGRANTx[i].write(false);
+        for (size_t i = 0; i < MASTER_CNT; i++) {
+            HGRANTx[i].write(false); // 清除授权
+        }
         for (size_t i = 0; i < MASTER_CNT; i++) {
             // 仲裁规则2：设备id越小,优先级越高
             if (HBUSREQx[i].read() == true) {
-                LOG_INFO(logger, "{}  Master[{}] is granted.", sc_time_stamp().to_string(), i);
+                LOG_INFO(logger, "{}  [{}] grants authorization to Master({}).", sc_time_stamp().to_string(), name(),
+                         i);
                 HGRANTx[i].write(true);
                 HMASTER.write(i);
                 if (HLOCKx[i].read() == true) {
