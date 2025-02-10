@@ -19,6 +19,5 @@ class SimpleCPU : public AHBMasterInterface {
     bool AddrValidCheck(sc_uint<BW> addr, sc_uint<BW> size);
 
   private:
-    DEVICE_ID id_;
     sc_uint<BW> cache_[CACHE_SIZE]; // 1KB
 };

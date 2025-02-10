@@ -1,7 +1,7 @@
 #include "ahb_bus.h"
 
 AHBBus::AHBBus(sc_module_name name) : sc_module(name), HCLK("g_clk", 10, SC_NS, 0.5, 0, SC_NS, false) {
-    // 时钟周期10ns,高低电平各占一半,起始时刻为0,起始为低电平
+    // HCLK("g_clk", 10, SC_NS, 0.5, 0, SC_NS, false); // 时钟周期10ns,高低电平各占一半,起始时刻为0,起始为低电平
     SC_THREAD(RiseResetSignal);
     sensitive << HCLK.posedge_event();
     // init simple_cpu(Master)
@@ -27,7 +27,7 @@ AHBBus::AHBBus(sc_module_name name) : sc_module(name), HCLK("g_clk", 10, SC_NS, 
     simple_cpu_shell_->HWDATA(HWDATA);
 
     // init ram_onchip(Slave)
-    ram_onchip_ = new RAMOnChip(SLAVE_RAM_ID);
+    ram_onchip_ = new RAMOnChip(SLAVE_RAM_ID, sc_time(1, SC_NS));
     ram_shell_ = new AHBSlaveShell("ram_onchip_shell");
     ram_shell_->port_(*ram_onchip_);
     // bind input signal

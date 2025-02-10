@@ -1,6 +1,6 @@
 #include "ram_onchip.h"
 
-RAMOnChip::RAMOnChip(DEVICE_ID id) : id_(id) {
+RAMOnChip::RAMOnChip(DEVICE_ID id, sc_time resp_time) : AHBSlaveInterface(id, resp_time) {
     for (size_t i = 0; i < RAM_SIZE; i++) {
         ram_[i] = (i + 1) % BW; // 1~32
     }

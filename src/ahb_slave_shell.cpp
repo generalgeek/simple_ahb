@@ -49,6 +49,7 @@ void AHBSlaveShell::Process() {
                     ClearHSPLIT(); // 错误时清除所有HSPLITx位
                 }
             }
+            wait(port_->GetRespT()); // 模拟Slave的响应时间
             HREADY.write(true);
         }
     }

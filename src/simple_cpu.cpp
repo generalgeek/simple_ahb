@@ -1,6 +1,6 @@
 #include "simple_cpu.h"
 
-SimpleCPU::SimpleCPU(DEVICE_ID id) : id_(id) {
+SimpleCPU::SimpleCPU(DEVICE_ID id) : AHBMasterInterface(id) {
 }
 
 bool SimpleCPU::MasterRead(sc_uint<BW> addr, sc_uint<BW>& data, sc_uint<BW> size) {
@@ -28,13 +28,13 @@ bool SimpleCPU::MasterWrite(sc_uint<BW> addr, sc_uint<BW> data, sc_uint<BW> size
 }
 
 MasterTask SimpleCPU::GetTask() {
-    // 模拟发起读任务
+    // 模拟发起读任务,可以任意自定义
     MasterTask task;
-    task.write = false;
-    task.burst_type = BURST_TYPE::INCR4;
-    task.trans_size = TRANS_SIZE::Word;
-    task.slave_addr = RAM_ADDR_START;
-    task.inner_addr = 0;
+    task.write = false;                  // 读
+    task.burst_type = BURST_TYPE::INCR4; // BURST-INCR4类型
+    task.trans_size = TRANS_SIZE::Word;  // 32bit
+    task.slave_addr = RAM_ADDR_START;    // SlaveRam的起始地址
+    task.inner_addr = 0;                 // 操作内部cache的地址
     return task;
 }
 
