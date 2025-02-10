@@ -9,8 +9,8 @@ class AHBDecoder : public sc_module {
     SC_HAS_PROCESS(AHBDecoder);
     AHBDecoder(const sc_module_name& name) : sc_module(name) {
         SC_METHOD(Process);
-        sensitive << HCLK.pos() << HADDR;
-        dont_initialize();
+        sensitive << HCLK.pos()/*  << HADDR */;
+        // dont_initialize();
     }
 
   public:
@@ -24,5 +24,6 @@ class AHBDecoder : public sc_module {
   private:
     void Process();
     void Reset();
+    void ClearHSEL();
     DEVICE_ID AddrDecode(sc_uint<BW> addr);
 };

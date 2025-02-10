@@ -6,11 +6,16 @@ void AHBDecoder::Process() {
         this->Reset();
         return;
     }
+    ClearHSEL();
     DEVICE_ID slave_sel = this->AddrDecode(HADDR.read());
     HSELx[slave_sel].write(true);
 }
 
 void AHBDecoder::Reset() {
+    this->ClearHSEL();
+}
+
+void AHBDecoder::ClearHSEL() {
     for (size_t i = 0; i < SLAVE_CNT; i++)
         HSELx[i].write(false);
 }
