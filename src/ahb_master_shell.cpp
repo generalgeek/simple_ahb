@@ -71,8 +71,9 @@ void AHBMasterShell::Process() {
             // 上面for循环结束后就完成了一个完整Task的处理
             task_done = true;
             HBUSREQ.write(false);
-            HLOCK.write(false); // 释放总线
-            wait();             // 增加一个时钟等待周期，让仲裁器更新信号
+            HTRANS.write(TRANS_TYPE::IDLE); // 挂起
+            HLOCK.write(false);             // 释放总线
+            wait();                         // 增加一个时钟等待周期，让仲裁器更新信号
         }
     }
 }

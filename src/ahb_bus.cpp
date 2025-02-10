@@ -41,7 +41,7 @@ AHBBus::AHBBus(sc_module_name name) : sc_module(name), HCLK("g_clk", 10, SC_NS, 
     ram_shell_->HRESET(HRESETn);
     ram_shell_->HCLK(HCLK);
     ram_shell_->HMASTER(HMASTER);
-    ram_shell_->HMASTERLOCK(HMASTERLOCK);
+    ram_shell_->HMASTLOCK(HMASTLOCK);
     // bind output signal
     ram_shell_->HREADY(HREADY);
     ram_shell_->HRESP(HRESP);
@@ -68,7 +68,7 @@ AHBBus::AHBBus(sc_module_name name) : sc_module(name), HCLK("g_clk", 10, SC_NS, 
     for (size_t i = 0; i < MASTER_CNT; i++)
         arbiter_->HGRANTx[i](HGRANTx[i]);
     arbiter_->HMASTER(HMASTER);
-    arbiter_->HMASTLOCK(HMASTERLOCK);
+    arbiter_->HMASTLOCK(HMASTLOCK);
 
     // init decoder
     decoder_ = new AHBDecoder("decoder");

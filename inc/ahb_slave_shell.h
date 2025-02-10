@@ -27,7 +27,7 @@ class AHBSlaveShell : public sc_module {
     sc_in<bool> HRESET;        // Reset signal (active low)
     sc_in<bool> HCLK;          // Clock signal
     sc_in<sc_uint<4>> HMASTER; // Master number
-    sc_in<bool> HMASTERLOCK;   // Master lock signal
+    sc_in<bool> HMASTLOCK;     // Master lock signal
     // Output ports
     sc_out<bool> HREADY;              // Ready signal
     sc_out<sc_uint<2>> HRESP;         // Response signal

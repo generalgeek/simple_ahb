@@ -32,4 +32,5 @@ class AHBArbiter : public sc_module {
   private:
     void Process();
     void Reset();
+    void GranteMaster(DEVICE_ID id);
 };

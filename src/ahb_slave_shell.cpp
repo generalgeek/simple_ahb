@@ -15,16 +15,11 @@ void AHBSlaveShell::Process() {
                 ClearHSPLIT();
                 continue;
             }
+            ClearHSPLIT(); // 清除所有HSPLITx位，禁止其他Master访问
             // 检查是否锁定事务
-            if (HMASTERLOCK.read() == true) {
-                // 如果HMASTERLOCK为true，表示该Master已锁定总线，其他Master不能继续
-                ClearHSPLIT(); // 设置所有HSPLITx位为0，禁止其他Master访问
-            } else {
-                // 如果没有锁定事务，且当前Slave没有返回SPLIT响应，则设置HSPLITx
-                if (HTRANS.read() != TRANS_TYPE::IDLE && HTRANS.read() != TRANS_TYPE::BUSY) {
-                    HSPLITx[HMASTER.read()].write(true);
-                    // HSPLITx.write(HSPLITx.read() | (1 << HMASTER.read())); // 允许当前Master继续
-                }
+            if (HMASTLOCK.read() == true) {
+                // 如果HMASTLOCK为true，表示该Master已锁定总线，其他Master不能继续
+                HSPLITx[HMASTER.read()].write(true);
             }
             HREADY.write(false);
             sc_uint<BW> addr = HADDR.read();
@@ -33,7 +28,6 @@ void AHBSlaveShell::Process() {
                 sc_uint<BW> data = HWDATA.read();
                 if (port_->SlaveWrite(addr, data, size)) {
                     HRESP.write(TRANS_RESP::OKAY);
-                    HSPLITx[HMASTER.read()].write(false); // 写操作完成后清除对应位
                 } else {
                     HRESP.write(TRANS_RESP::ERROR);
                     ClearHSPLIT(); // 错误时清除所有HSPLITx位
@@ -43,7 +37,6 @@ void AHBSlaveShell::Process() {
                 if (port_->SlaveRead(addr, data, size)) {
                     HRDATA.write(data);
                     HRESP.write(TRANS_RESP::OKAY);
-                    HSPLITx[HMASTER.read()].write(false); // 读操作完成后清除对应位
                 } else {
                     HRESP.write(TRANS_RESP::ERROR);
                     ClearHSPLIT(); // 错误时清除所有HSPLITx位

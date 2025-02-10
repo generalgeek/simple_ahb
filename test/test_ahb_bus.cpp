@@ -28,7 +28,7 @@ int sc_main(int argc, char* argv[]) {
             sc_trace(tf, ahb_bus.HSPLITx[i], std::string("HSPLIT_" + std::to_string(i)));
         }
         sc_trace(tf, ahb_bus.HMASTER, "HMASTER");
-        sc_trace(tf, ahb_bus.HMASTERLOCK, "HMASTERLOCK");
+        sc_trace(tf, ahb_bus.HMASTLOCK, "HMASTLOCK");
     }
 
     sc_start(200, SC_NS);

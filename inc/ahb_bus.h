@@ -39,7 +39,7 @@ class AHBBus : public sc_module {
     sc_signal<bool> HLOCKx[MASTER_CNT];
     sc_signal<bool> HGRANTx[MASTER_CNT];
     sc_signal<sc_uint<4>> HMASTER;
-    sc_signal<bool> HMASTERLOCK;
+    sc_signal<bool> HMASTLOCK;
     sc_signal<bool> HSPLITx[MASTER_CNT];
 
   private:
