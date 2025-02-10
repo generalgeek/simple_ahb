@@ -28,13 +28,17 @@ bool SimpleCPU::MasterWrite(sc_uint<BW> addr, sc_uint<BW> data, sc_uint<BW> size
 }
 
 MasterTask SimpleCPU::GetTask() {
+    static sc_uint<BW> inner_addr = 0;
+    static sc_uint<BW> slave_addr = RAM_ADDR_START;
     // 模拟发起读任务,可以任意自定义
     MasterTask task;
-    task.write = false;                  // 读
-    task.burst_type = BURST_TYPE::INCR4; // BURST-INCR4类型
-    task.trans_size = TRANS_SIZE::Word;  // 32bit
-    task.slave_addr = RAM_ADDR_START;    // SlaveRam的起始地址
-    task.inner_addr = 0;                 // 操作内部cache的地址
+    task.write = false;                   // 读
+    task.burst_type = BURST_TYPE::INCR4;  // BURST-INCR4类型
+    task.trans_size = TRANS_SIZE::Word;   // 32bit
+    task.slave_addr = slave_addr;         // 操作Slave的地址
+    task.inner_addr = inner_addr;         // 操作内部cache的地址
+    slave_addr += (1 << task.trans_size); // 注意地址可能超出范围
+    slave_addr += (1 << task.trans_size); // 注意地址可能超出范围
     return task;
 }
 
